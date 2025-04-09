@@ -314,7 +314,9 @@ impl<'a> Write for &'a TcpStream {
     }
 
     fn write_vectored(&mut self, bufs: &[IoSlice<'_>]) -> io::Result<usize> {
-        self.inner.do_io(|mut inner| inner.write_vectored(bufs))
+        let ret = self.inner.do_io(|mut inner| inner.write_vectored(bufs));
+        dbg!(&ret, bufs.iter().map(|b| b.len()).collect::<Vec<_>>())
+        ret
     }
 
     fn flush(&mut self) -> io::Result<()> {
